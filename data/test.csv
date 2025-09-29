@@ -1,0 +1,2 @@
+subject_id,nifti_path,label
+EXAMPLE_SUBJ_003,data/sample_subject.nii.gz,0
