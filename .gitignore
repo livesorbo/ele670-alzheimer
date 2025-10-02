@@ -1,0 +1,15 @@
+
+# Ignorerer data and resultat
+data/
+results/
+
+# Ignorerer NIfTI og CSV filer
+*.nii.gz
+*.csv
+
+# Ignorerer Python cache
+__pycache__/
+*.pyc
+
+# Ignorerer system filer
+.DS_Store

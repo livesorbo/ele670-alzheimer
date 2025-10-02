@@ -102,7 +102,7 @@ def train_and_evaluate(args):
     test_metrics = evaluate(model, test_loader, device)
     print(f"[Test] Slice Acc={test_metrics['slice']['accuracy']:.3f}, AUC={test_metrics['slice']['auc']:.3f} | Subject Acc={test_metrics['subject']['accuracy']:.3f}, AUC={test_metrics['subject']['auc']:.3f}")
 
-    # lagre metrics
+    # lagre matriser
     out = {"val": val_metrics, "test": test_metrics, "best_val_subject_auc": best_val_auc}
     os.makedirs("results", exist_ok=True)
     with open("results/metrics.json", "w") as f:
