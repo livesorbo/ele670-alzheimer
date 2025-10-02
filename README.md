@@ -11,21 +11,24 @@ This project aims to classify patients with Alzheimer’s Disease using MRI scan
 - Data quality verified with slice visualization  
 - SSH server and GPU environment configured (PyTorch, MONAI, NiBabel)  
 
-## Next Steps
-- Implement baseline 2D CNN on slices  
-- Add subject-level aggregation (average / majority vote)  
-- Extend to multi-slice input  
-- Apply data augmentation  
-- Experiment with transfer learning  
-- Train and evaluate models, generate results  
+## forward:
+* Implement baseline 2D CNN  
+* Add subject-level aggregation
+* Extend to multi-slice input  
+* Apply augmentation  
+* Train and evaluate models, generate results  
 
 ## Environment Setup
 ```bash
-conda create -n ELE670 python=3.10
+uenv verbose cuda-11.8.0
+uenv verbose cudnn-11.x-8.8.0 
+uenv verbose miniconda3-py312 
+conda create --name ELE670
 conda activate ELE670
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-pip install monai nibabel scikit-learn matplotlib pandas
-
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip3 install numpy
+pip3 install matplotlib
+pip3 install pandas
 
 
 
