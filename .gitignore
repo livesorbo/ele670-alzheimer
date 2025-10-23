@@ -1,15 +1,85 @@
+# ===============================
+# ELE670 Alzheimer's Project - Git Ignore
+# ===============================
 
-# Ignorerer data and resultat
-data/
-results/
-
-# Ignorerer NIfTI og CSV filer
-*.nii.gz
-*.csv
-
-# Ignorerer Python cache
+# --- Python ---
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+*.so
+*.ipynb_checkpoints
+.env
+venv/
+ENV/
+env/
+.venv/
+*.log
 
-# Ignorerer system filer
+# --- Jupyter and VS Code ---
+.vscode/
+.ipynb_checkpoints/
+*.code-workspace
+
+# --- OS files ---
 .DS_Store
+Thumbs.db
+
+# --- Data files (too large for GitHub) ---
+data/
+*.nii
+*.nii.gz
+*.hdr
+*.img
+*.csv
+*.zip
+*.tar
+*.tar.gz
+*.h5
+*.hdf5
+
+# --- Model weights and checkpoints ---
+*.pt
+*.pth
+*.ckpt
+
+# --- NumPy / intermediate arrays ---
+*.npz
+*.npy
+
+# --- Results and plots (keep only important ones manually) ---
+results/
+results_multi/
+results_compare/
+results_single/
+train_*.log
+
+# You can un-ignore small result images you want to keep:
+# !results/test_cm_subject.png
+# !results/test_roc_subject.png
+
+# --- Temporary or cache folders ---
+__MACOSX/
+tmp/
+temp/
+cache/
+monai_cache/
+wandb/
+lightning_logs/
+
+# --- SSH / local configs ---
+*.pem
+*.key
+*.bat
+*.sh
+*.swp
+
+# --- Conda / Environment ---
+*.yml
+*.yaml
+*.lock
+
+# --- Other unnecessary files ---
+nohup.out

@@ -1,1 +1,0 @@
-Denne filen er en plassholder. Legg dine faktiske NIfTI (.nii/.nii.gz) filer her og oppdater stiene i CSV-filene.

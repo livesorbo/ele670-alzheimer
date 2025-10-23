@@ -22,8 +22,10 @@ class SliceDataset(Dataset):
                  csv_path: str,
                  multi_slice: bool = False,
                  axis: str = "z",
-                 central_fraction: float = 0.6):
+                 central_fraction: float = 0.6,
+                 train: bool=False):
         super().__init__()
+        self.train=train
         assert axis in {"x", "y", "z"}
         self.df = pd.read_csv(csv_path)
         if not {"subject_id", "nifti_path", "label"}.issubset(self.df.columns):
@@ -58,6 +60,8 @@ class SliceDataset(Dataset):
         path = self.df.iloc[row_idx]["nifti_path"]
         data = nib.load(path).get_fdata().astype(np.float32)
         # normaliser per volum først (stabilt for multi-slice)
+        if data.ndim==4 and data.shape[-1]==1:
+            data=data[...,0]
         data = _zscore(data)
         self._cache[row_idx] = data
         return data
@@ -80,8 +84,8 @@ class SliceDataset(Dataset):
         C = 3 if self.multi_slice else 1
 
         if self.multi_slice:
-            # nabo-slices (s-1, s, s+1) med kant-replikering
-            s_idxs = [max(0, s - 1), s, min(vol.shape[{"x":0, "y":1, "z":2}[self.axis]] - 1, s + 1)]
+        # nabo-slices (s-1, s, s+1) med kant-replikering
+            s_idxs = [max(0, s - 1), s, min(vol.shape[{"x": 0, "y": 1, "z": 2}[self.axis]] - 1, s + 1)]
             slices = []
             for si in s_idxs:
                 slices.append(self._get_slice(vol, si, self.axis))
@@ -91,6 +95,34 @@ class SliceDataset(Dataset):
             arr = sl[None, ...]  # (1, H, W)
 
         tensor = torch.from_numpy(arr.astype(np.float32))
+
+    # --- DATA AUGMENTATION (only when training) ---
+        if self.train:
+            import random
+            import torch.nn.functional as F
+
+        # Random horizontal flip
+            if random.random() < 0.5:
+                tensor = torch.flip(tensor, dims=[2])
+
+        # Random vertical flip
+            if random.random() < 0.5:
+                tensor = torch.flip(tensor, dims=[1])
+
+        # Random scaling (zoom)
+            if random.random() < 0.3:
+                scale_factor = random.uniform(0.9, 1.1)
+                tensor = F.interpolate(tensor.unsqueeze(0), scale_factor=scale_factor,
+                                    mode='bilinear', align_corners=False).squeeze(0)
+                tensor = F.interpolate(tensor.unsqueeze(0), size=(176, 208),
+                                    mode='bilinear', align_corners=False).squeeze(0)
+
+        # Gaussian noise
+            if random.random() < 0.3:
+                noise = torch.randn_like(tensor) * 0.02
+                tensor = torch.clamp(tensor + noise, 0, 1)
+    # --- END DATA AUGMENTATION ---
+
         label = int(row["label"])
         subj = str(row["subject_id"])
         return {"image": tensor, "label": label, "subject_id": subj}
