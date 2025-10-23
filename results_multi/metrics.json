@@ -1,0 +1,31 @@
+{
+  "val": {
+    "slice": {
+      "accuracy": 0.7692307692307693,
+      "auc": 0.5575858549899133,
+      "sensitivity": 0.0,
+      "specificity": 0.9999999999998113
+    },
+    "subject": {
+      "accuracy": 0.765625,
+      "auc": 0.761904761904762,
+      "sensitivity": 0.0,
+      "specificity": 0.9999999999795919
+    }
+  },
+  "test": {
+    "slice": {
+      "accuracy": 0.7727272727272727,
+      "auc": 0.5734140612457158,
+      "sensitivity": 0.0,
+      "specificity": 0.9999999999998149
+    },
+    "subject": {
+      "accuracy": 0.7727272727272727,
+      "auc": 0.8666666666666667,
+      "sensitivity": 0.0,
+      "specificity": 0.9999999999803922
+    }
+  },
+  "best_val_subject_auc": 0.761904761904762
+}

@@ -18,7 +18,7 @@ env/
 .venv/
 *.log
 
-# --- Jupyter and VS Code ---
+# --- VS Code / Editor ---
 .vscode/
 .ipynb_checkpoints/
 *.code-workspace
@@ -49,16 +49,29 @@ data/
 *.npz
 *.npy
 
-# --- Results and plots (keep only important ones manually) ---
-results/
-results_multi/
-results_compare/
-results_single/
-train_*.log
+# --- Results ---
+# Ignore heavy results, keep figures and summaries
+results/*.npz
+results/*.json
+results/*.pt
 
-# You can un-ignore small result images you want to keep:
-# !results/test_cm_subject.png
-# !results/test_roc_subject.png
+# Allow important result figures
+!results/*.png
+
+# Allow summary markdown or text reports
+!results/*.txt
+!results/*.md
+
+# Allow subfolders with comparison or multi-run images
+!results_compare/*.png
+!results_multi/*.png
+!results_single/*.png
+
+# Ignore everything else inside results folders by default
+results/**/*
+!results/**/*.png
+!results/**/*.txt
+!results/**/*.md
 
 # --- Temporary or cache folders ---
 __MACOSX/
@@ -81,5 +94,5 @@ lightning_logs/
 *.yaml
 *.lock
 
-# --- Other unnecessary files ---
+# --- Misc ---
 nohup.out
