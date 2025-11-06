@@ -3,7 +3,7 @@ import json
 import argparse
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")  # allows plotting without GUI
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 import torch
@@ -16,7 +16,6 @@ from src.utils import aggregate_subject_probs, compute_metrics
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 
 
-# --- helper to create data loaders ---
 def _make_loader(csv_path, multi_slice, batch_size=32, num_workers=2, shuffle=False):
     ds = SliceDataset(csv_path, multi_slice=multi_slice)
     loader = DataLoader(ds, batch_size=batch_size, shuffle=shuffle,
@@ -24,7 +23,7 @@ def _make_loader(csv_path, multi_slice, batch_size=32, num_workers=2, shuffle=Fa
     return ds, loader
 
 
-# --- collect model outputs ---
+#collect model outputs
 @torch.no_grad()
 def collect_probs(model, loader, device):
     model.eval()
@@ -42,7 +41,7 @@ def collect_probs(model, loader, device):
     return all_labels, all_probs, np.array(all_subj)
 
 
-# --- plotting functions ---
+#plotting function
 def plot_roc(y_true, y_score, title, out_png):
     fpr, tpr, _ = roc_curve(y_true, y_score)
     roc_auc = auc(fpr, tpr)
@@ -88,7 +87,7 @@ def plot_confmat(y_true, y_pred, title, out_png):
                 sensitivity=sensitivity, specificity=specificity)
 
 
-# --- evaluation per dataset split ---
+# evaluation split
 def evaluate_split(model, csv_path, device, multi_slice, tag, outdir):
     os.makedirs(outdir, exist_ok=True)
     ds, loader = _make_loader(csv_path, multi_slice=multi_slice, batch_size=64, num_workers=2, shuffle=False)
@@ -108,13 +107,13 @@ def evaluate_split(model, csv_path, device, multi_slice, tag, outdir):
     )
     metrics_subject = compute_metrics(y_true_subject, probs_subject)
 
-    # --- ROC plots ---
+    # ROC
     roc_slice = plot_roc(y_true_slice, probs_slice[:, 1],
                          f"{tag} ROC (slice)", os.path.join(outdir, f"{tag}_roc_slice.png"))
     roc_subject = plot_roc(y_true_subject, probs_subject[:, 1],
                            f"{tag} ROC (subject)", os.path.join(outdir, f"{tag}_roc_subject.png"))
 
-    # --- confusion matrices ---
+    # confusion matrices
     y_pred_slice = (probs_slice[:, 1] >= 0.5).astype(int)
     y_pred_subject = (probs_subject[:, 1] >= 0.5).astype(int)
     cm_slice = plot_confmat(y_true_slice, y_pred_slice,
@@ -122,7 +121,7 @@ def evaluate_split(model, csv_path, device, multi_slice, tag, outdir):
     cm_subject = plot_confmat(y_true_subject, y_pred_subject,
                               f"{tag} Confusion Matrix (subject)", os.path.join(outdir, f"{tag}_cm_subject.png"))
 
-    # --- save results ---
+    #save results
     np.savez(os.path.join(outdir, f"{tag}_raw_arrays.npz"),
              y_true_slice=y_true_slice, probs_slice=probs_slice, subj_ids=subj_ids,
              y_true_subject=y_true_subject, probs_subject=probs_subject)
@@ -140,7 +139,7 @@ def evaluate_split(model, csv_path, device, multi_slice, tag, outdir):
     return summary
 
 
-# --- main script ---
+# main
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", default="results/best_model.pt")

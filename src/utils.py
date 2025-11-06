@@ -3,11 +3,6 @@ import numpy as np
 from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix
 
 def aggregate_subject_probs(subject_ids, probs):
-    """
-    Aggregerer slice-probabiliteter per subject ved gjennomsnitt.
-    Returnerer:
-      subj_ids_unique, agg_probs
-    """
     by_subj = defaultdict(list)
     for sid, p in zip(subject_ids, probs):
         by_subj[sid].append(p)
@@ -19,10 +14,6 @@ def aggregate_subject_probs(subject_ids, probs):
     return subj_ids, np.vstack(agg)
 
 def compute_metrics(y_true, y_prob):
-    """
-    y_true: (N,) int labels {0,1}
-    y_prob: (N,2) probabilities for two classes
-    """
     y_pred = y_prob.argmax(axis=1)
     acc = accuracy_score(y_true, y_pred)
     try:

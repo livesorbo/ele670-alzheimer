@@ -82,7 +82,7 @@ def train_and_evaluate(args):
     # Optimizer
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
-# Compute class weights based on dataset balance
+# Compute class weights based balance
     class_counts = np.bincount(labels)
     pos_boost = 1.5  # makes Demented (class 1) more important
     w = 1.0 / class_counts.astype(np.float32)
@@ -158,13 +158,13 @@ def train_and_evaluate(args):
         
         scheduler.step(val_auc)
 
-    # Evaluer på test med beste modell
+    # evaluate best model
     ckpt = torch.load(best_path, map_location=device)
     model.load_state_dict(ckpt["state_dict"])
     test_metrics = evaluate(model, test_loader, device)
     print(f"[Test] Slice Acc={test_metrics['slice']['accuracy']:.3f}, AUC={test_metrics['slice']['auc']:.3f} | Subject Acc={test_metrics['subject']['accuracy']:.3f}, AUC={test_metrics['subject']['auc']:.3f}")
 
-    # lagre matriser
+    # metrices
     out = {"val": val_metrics, "test": test_metrics, "best_val_subject_auc": best_val_auc}
     os.makedirs("results", exist_ok=True)
     with open("results/metrics.json", "w") as f:

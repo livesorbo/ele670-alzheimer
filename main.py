@@ -10,8 +10,8 @@ def parse_args():
     p.add_argument("--batch_size", type=int, default=8)
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--multi_slice", action="store_true", help="Stack 3 slices as channels")
-    p.add_argument("--num_workers", type=int, default=0)  # sett >0 hvis du vil
-    p.add_argument("--device", type=str, default="cpu")   # "cuda" hvis tilgjengelig
+    p.add_argument("--num_workers", type=int, default=0) 
+    p.add_argument("--device", type=str, default="cpu") 
     return p.parse_args()
 
 if __name__ == "__main__":

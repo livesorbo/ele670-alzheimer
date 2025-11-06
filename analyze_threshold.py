@@ -20,6 +20,3 @@ for t in thresholds:
     accuracy = (tp + tn) / len(y_true)
     print(f"{t:9.2f} | {sensitivity:11.2f} | {specificity:11.2f} | {accuracy:8.2f}")
 
-# (Optional) print AUC once for reference
-auc = roc_auc_score(y_true, y_prob)
-print(f"\nROC AUC: {auc:.3f}")

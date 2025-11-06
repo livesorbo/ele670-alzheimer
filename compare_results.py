@@ -3,11 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-# paths
 multi_path = "results_multi/metrics.json"
 single_path = "results_single/metrics.json"
-
-# load both
 multi = json.load(open(multi_path))
 single = json.load(open(single_path))
 
@@ -23,8 +20,8 @@ def extract_summary(metrics, name):
 multi_summary = extract_summary(multi, "Multi-slice")
 single_summary = extract_summary(single, "Single-slice")
 
-# print table
-print("\n📊 Summary Comparison:")
+# table
+print("\n Summary Comparison:")
 for key in multi_summary.keys():
     if key != "Name":
         print(f"{key:20s}: {single_summary['Name']:>12s}={single_summary[key]:.3f} | {multi_summary['Name']:>12s}={multi_summary[key]:.3f}")
@@ -59,4 +56,3 @@ plt.tight_layout()
 
 os.makedirs("results_compare", exist_ok=True)
 plt.savefig("results_compare/comparison_barplot.png", dpi=300)
-print("\n Saved comparison bar plot to results_compare/comparison_barplot.png")
